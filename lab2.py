@@ -120,208 +120,66 @@ class HelloWorldService(ServiceBase):
             }
             }
         
-        
-
-        pStreets = []
+        temp_streets = []
         for crimeStreet in arr_crime["crimes"]:
             if crimeStreet["address"].find(' & ')!=-1:
                 street = crimeStreet["address"].split(' & ')                
                 for st in street:
-                    pStreets.append(st)
+                    temp_streets.append(st)
             else:
-                pStreets.append(crimeStreet["address"])
-            for st in pStreets:
+                temp_streets.append(crimeStreet["address"])
+            for st in temp_streets:
                 if st.find('BLOCK OF')!=-1:
                     st = st.split('BLOCK OF ')[1]
                 if st.rfind('BLOCK ')!=-1:
                     st =st[st.rfind('BLOCK ') + 6:]
                 streets[st] = streets.get(st, 0) + 1
-        st1 = ""
-        st2 = ""
-        st3 = ""
+        street1 = ""
+        street2 = ""
+        street3 = ""
         i = 0
         arr = streets
-        for elem in streets:
+        for st_elem in streets:
             if i==0:
-                st1 = elem
+                street1 = st_elem
                 i += 1
                 continue
             if i==1:
-                st2 = elem
-                if arr[st2]>arr[st1]:
-                    temp = st2
-                    st2 = st1
-                    st1 = temp
+                street2 = st_elem
+                if arr[street2]>arr[street1]:
+                    temp = street2
+                    street2 = street1
+                    street1 = temp
                 i += 1
                 continue
             if i==2:
-                st3 = elem
-                if arr[st3] > arr[st2]:
-                    temp = st3
-                    st3 = st2
-                    st2 = temp
-                if arr[st2] > arr[st1]:
-                    temp = st2
-                    st2 = st1
-                    st1 = temp
+                street3 = st_elem
+                if arr[street3] > arr[street2]:
+                    temp = street3
+                    street3 = street2
+                    street2 = temp
+                if arr[street2] > arr[street1]:
+                    temp = street2
+                    street2 = street1
+                    street1 = temp
                 i += 1
                 continue
-            if arr[elem] > arr[st3]:
-                st3 = elem
-                if arr[st3] > arr[st2]:
-                    temp = st3
-                    st3 = st2
-                    st2 = temp
-                if arr[st2] > arr[st1]:
-                    temp = st2
-                    st2 = st1
-                    st1 = temp
+            if arr[st_elem] > arr[street3]:
+                street3 = st_elem
+                if arr[street3] > arr[street2]:
+                    temp = street3
+                    street3 = street2
+                    street2 = temp
+                if arr[street2] > arr[street1]:
+                    temp = street2
+                    street2 = street1
+                    street1 = temp
                 i += 1
                 continue
             i += 1
-        result_String["the_most_dangerous_streets"] = [st1, st2, st3]
-        #return result_String
-            
+        result_String["the_most_dangerous_streets"] = [street1, street2, street3]
+                    
         yield result_String
-        
-        '''
-            for key in arr_crime['crimes']:
-
-                address = re.split(r'\bBLOCK', key["address"])
-                if re.search(r'\bST', address[0]):
-                    temp1 = address[0].strip().replace("OF ", "")
-                    tmp1 = re.split("&", temp1)   
-                    street_list.append(tmp1[0].strip())
-                if (len(tmp1) > 1):
-                    street_list.append(tmp1[1].strip())
-                if len(address) > 1:
-                    temp1 = address[1].strip().replace("OF ", "")
-                    tmp2 = temp1.split("&")
-                    street_list.append(tmp2[0].strip())
-                if (len(tmp2) > 1):
-                    street_list.append(tmp2[1].strip())
-                if len(address) > 2:
-                    temp1 = address[2].strip().replace("OF ", "")
-                    tmp3 = temp1.split("&")
-                    street_list.append(tmp3[0].strip())
-                if (len(tmp3) > 1):
-                    street_list.append(tmp3[1].strip())
-                    street_counter = {}
-            
-            for street in street_list:
-                if street in street_counter:
-                    street_counter[street] += 1
-                else:
-                    street_counter[street] = 1
-
-            popular_street = sorted(street_counter, key=street_counter.get, reverse=True)
-
-            top_3 = popular_street[:3]
-        '''    
-
-
-
-
-        '''
-        streets = []
-
-        strt = [res_crimeType for res_crimeType in res_crime["crimes"] if len(res_crimeType['address']) > 0 ]
-            #for res in res_crimeType:
-        #yield strt
-        for res in strt:
-            if res['address'].find(' BLOCK ',0,len(res['address'])):
-                res1 = res['address'].split(' BLOCK ')
-                if res1['address'].find(' BLOCK ',0,len(res['address'])):
-                    res1n = res1['address'].split(' BLOCK ')
-                #streets.append(res2[0])
-                print 'res1 %s ' % res1n
-            if res['address'].find(' OF ',0,len(res['address'])):
-                res2 = res['address'].split(' OF ')
-                #streets.append(res1[0])
-                print 'res2 %s ' % res2
-            #streets.append(res1[1])
-            if res['address'].find(' & ',0,len(res['address'])):#streets.append(res1[1])
-                res3 =  res['address'].split(' & ')
-                print 'res3 %s ' % res3
-                #streets.append(res3[0])
-                #streets.append(res3[1])
-
-        yield streets
-        yield 'total streets = %s' % len(streets)
-        '''
-        '''
-        pStreets = []
-        streets = []
-        for crimeStreet in arr_crime["crimes"]:
-            if crimeStreet["address"].find(' & ') != -1:
-                street = crimeStreet["address"].split(' & ')                
-                for st in street:
-                    pStreets.append(st)
-            else:
-                pStreets.append(crimeStreet["address"])
-            for st in pStreets:
-                if st.find('BLOCK OF') != -1:
-                    st = st.split('BLOCK OF ')[1]
-                if st.rfind('BLOCK ') != -1:
-                    st = st[st.rfind('BLOCK ') + 6:]
-                #etc.streets[st] = etc.streets.get(st, 0) + 1
-                #streets = streets.append(st)
-                i = 0
-                if len(streets) == 0:
-                    streets.append(st)
-                else:
-                    for elem in streets:
-                        i += 1
-                        if elem == st:
-                            break
-                        elif i<len(streets):
-                            continue
-                        elif len(streets)<3:
-                            streets.append(st)
-            pStreets = []
-        '''
-        
-
-
-        '''
-        streets_final = {}
-        streets = [res_crimeType for res_crimeType in arr_crime["crimes"] if len(res_crimeType['address']) > 0]
-        
-        for street in streets:
-            address = street['address']
-            if address.find('OF'):
-                str1 = address.split('OF')
-                d = [s.encode('ascii') for s in str1]    
-                for x in d:
-                    if len(d)>1:
-                        if x not in streets_final:
-                            streets_final[d[1]]= 1
-                        elif x in streets_final:           
-                            streets_final[d[1]] += 1
-                    elif len(d)==1:
-                        if x not in streets_final:
-                            streets_final[x]= 1
-                        elif x in streets_final:
-                            streets_final[x] += 1       
-            elif address.find("&"):
-                str2 = address.split("&")
-                d = [s.encode('ascii') for s in str2]
-                for y in d:
-                    if y not in streets_final:
-                        streets_final[y]= 1
-                    elif y in streets_final:
-                        streets_final[y] += 1
-        
-      
-        
-        streets_final = sorted( streets_final.items(), key=itemgetter(1), reverse=True)
-
-        dangerous_streets = []
-  
-        dangerous_streets.append(streets_final[0])
-        dangerous_streets.append(streets_final[1])
-        dangerous_streets.append(streets_final[2])
-        '''
         
 application = Application([HelloWorldService],
     tns='spyne.examples.hello',
